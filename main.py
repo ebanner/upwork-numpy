@@ -12,14 +12,6 @@ def get_nb_cells_as_json(fname):
     return json_dict['cells']
 
 
-def make_csv_from_nb(ipynb_fname):
-    nb_cells = get_nb_cells_as_json(ipynb_fname)
-    problems = get_problems(nb_cells)
-    problems_df = make_df(problems)
-    csv = output_to_csv(problems_df)
-    return csv
-
-
 def get_ith_problem_cells(nb_cells, i):
     """
 
@@ -92,4 +84,17 @@ def make_df(problems):
         problems,
         columns=['id', 'title', 'placeholder', 'content', 'output']
     )
+
+
+def to_csv(problems_df):
+    return problems_df.to_csv(index=False)
+
+
+def make_csv_from_nb(ipynb_fname):
+    nb_cells = get_nb_cells_as_json(ipynb_fname)
+    problems = get_problems(nb_cells)
+    problems_df = make_df(problems)
+    csv = to_csv(problems_df)
+    return csv
+
 

@@ -1,5 +1,5 @@
 from main import (get_id, get_ith_problem_cells, get_nb_cells_as_json,
-                  make_csv_from_nb, make_problem, make_df)
+                  make_csv_from_nb, make_problem, make_df, to_csv)
 
 import pandas as pd
 
@@ -434,8 +434,39 @@ print(v)"""
 
 
 def test_make_df():
-    expected = pd.read_csv('numpy-numpy.txt')
-    expected.at[0, 'title'] = 'Create a zero vector ""v"" of size 10' # double quote issue
+    expected = pd.DataFrame([
+        {
+            'id': 'a',
+            'title': """Create a zero vector ""v"" of size 10""",
+            'placeholder': """import numpy as np
+
+v = None
+# Your code here
+print(v)""",
+            'content': """import numpy as np
+
+v = np.zeros(10)
+print(v)""",
+            'output': '[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]'
+        },
+        {
+            'id': 'b',
+            'title': """Set "yst" to yesterday's date""",
+            'placeholder': """import numpy as np
+
+yst = None
+# Your code here
+print(yst)""",
+            'content': """import numpy as np
+
+yst = None
+yst = np.datetime64('today') - np.timedelta64(1)
+print('2021-12-09')""",
+            'output': '2021-12-09'
+        },
+    ],
+        columns=['id', 'title', 'placeholder', 'content', 'output']
+    )
 
     problems = [
         {
@@ -457,31 +488,89 @@ def test_make_df():
     output = make_df(problems)
 
     columns = ['title', 'placeholder', 'content', 'output']
-    print(expected)
     grid = expected[columns] == output[columns]
     assert grid.all().all()
 
 
-def test_full():
-    input = 'numpy-numpy.ipynb'
-    expected = """id,title,placeholder,content,output^M
-0622e7b5a2cd4df09c26203dbb0cda20,"Create a zero vector ""v"" of size 10","import numpy as np
+def test_to_csv():
+    expected = """id,title,placeholder,content,output
+a,"Create a zero vector \"\"\"\"v\"\"\"\" of size 10","import numpy as np
 
+v = None
 # Your code here
 print(v)","import numpy as np
 
 v = np.zeros(10)
-print(v)",[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]^M
-eca6fe43d8624c4c99edcffa58edade7,"Set ""yst"" to yesterday's date","import numpy as np
+print(v)",[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+b,"Set ""yst"" to yesterday's date","import numpy as np
 
-yst = None;
+yst = None
 # Your code here
 print(yst)","import numpy as np
 
-yst = None;
+yst = None
 yst = np.datetime64('today') - np.timedelta64(1)
-print('2021-12-09')",2021-12-09"""
-    output = make_csv_from_nb(input)
+print('2021-12-09')",2021-12-09
+"""
+    
+    problems_df = pd.DataFrame([
+        {
+            'id': 'a',
+            'title': """Create a zero vector ""v"" of size 10""",
+            'placeholder': """import numpy as np
+
+v = None
+# Your code here
+print(v)""",
+            'content': """import numpy as np
+
+v = np.zeros(10)
+print(v)""",
+            'output': '[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]'
+        },
+        {
+            'id': 'b',
+            'title': """Set "yst" to yesterday's date""",
+            'placeholder': """import numpy as np
+
+yst = None
+# Your code here
+print(yst)""",
+            'content': """import numpy as np
+
+yst = None
+yst = np.datetime64('today') - np.timedelta64(1)
+print('2021-12-09')""",
+            'output': '2021-12-09'
+        },
+    ],
+        columns=['id', 'title', 'placeholder', 'content', 'output']
+    )
+    
+    output = to_csv(problems_df)
     assert output == expected
+
+
+# def test_full():
+#     input = 'numpy-numpy.ipynb'
+#     expected = """id,title,placeholder,content,output^M
+# 0622e7b5a2cd4df09c26203dbb0cda20,"Create a zero vector ""v"" of size 10","import numpy as np
+
+# # Your code here
+# print(v)","import numpy as np
+
+# v = np.zeros(10)
+# print(v)",[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]^M
+# eca6fe43d8624c4c99edcffa58edade7,"Set ""yst"" to yesterday's date","import numpy as np
+
+# yst = None;
+# # Your code here
+# print(yst)","import numpy as np
+
+# yst = None;
+# yst = np.datetime64('today') - np.timedelta64(1)
+# print('2021-12-09')",2021-12-09"""
+#     output = make_csv_from_nb(input)
+#     assert output == expected
 
 
