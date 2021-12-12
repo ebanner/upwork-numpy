@@ -551,26 +551,29 @@ print('2021-12-09')""",
     assert output == expected
 
 
-# def test_full():
-#     input = 'numpy-numpy.ipynb'
-#     expected = """id,title,placeholder,content,output^M
-# 0622e7b5a2cd4df09c26203dbb0cda20,"Create a zero vector ""v"" of size 10","import numpy as np
+def test_full(mocker):
+    input = 'numpy-numpy.ipynb'
+    expected = """id,title,placeholder,content,output
+a,"Create a zero vector \"\"\"\"v\"\"\"\" of size 10","import numpy as np
 
-# # Your code here
-# print(v)","import numpy as np
+v = None
+# Your code here
+print(v)","import numpy as np
 
-# v = np.zeros(10)
-# print(v)",[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]^M
-# eca6fe43d8624c4c99edcffa58edade7,"Set ""yst"" to yesterday's date","import numpy as np
+v = np.zeros(10)
+print(v)",[0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+b,"Set ""yst"" to yesterday's date","import numpy as np
 
-# yst = None;
-# # Your code here
-# print(yst)","import numpy as np
+yst = None
+# Your code here
+print(yst)","import numpy as np
 
-# yst = None;
-# yst = np.datetime64('today') - np.timedelta64(1)
-# print('2021-12-09')",2021-12-09"""
-#     output = make_csv_from_nb(input)
-#     assert output == expected
+yst = None
+yst = np.datetime64('today') - np.timedelta64(1)
+print('2021-12-09')",2021-12-09
+"""
+    mocker.patch('main.get_id', side_effect=['a', 'b'])
+    output = make_csv_from_nb(input)
+    assert output == expected
 
 
