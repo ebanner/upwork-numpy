@@ -1,5 +1,6 @@
 import json
 import uuid
+import pandas as pd
 
 
 def get_nb_cells_as_json(fname):
@@ -84,3 +85,11 @@ def make_problem(problem_cells):
         'output': output
     }
     return problem
+
+
+def make_df(problems):
+    return pd.DataFrame(
+        problems,
+        columns=['id', 'title', 'placeholder', 'content', 'output']
+    )
+
