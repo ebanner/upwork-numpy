@@ -20,7 +20,7 @@ print(yst)","import numpy as np
 
 yst = None;
 yst = np.datetime64('today') - np.timedelta64(1)
-print(yst)",2021-12-09"""
+print('2021-12-09')",2021-12-09"""
     output = make_csv_from_nb(input)
     assert output == expected
 
@@ -127,6 +127,13 @@ def test_get_nb_cells_as_json():
             ]
         },
         {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": [
+                "Solution"
+            ]
+        },
+        {
             "cell_type": "code",
             "execution_count": 12,
             "metadata": {},
@@ -144,13 +151,17 @@ def test_get_nb_cells_as_json():
                 "\n",
                 "yst = None\n",
                 "yst = np.datetime64('today') - np.timedelta64(1)\n",
-                "print(yst)"
+                "print('2021-12-09')"
             ]
         }
     ]
 
     output = get_nb_cells_as_json(input)
-    assert output == expected
+    # same number of cells
+    assert len(output) == len(expected)
+    for output_cell, expected_cell in zip(output, expected):
+        assert output_cell['source'] == expected_cell['source']
+        assert output_cell.get('outputs') == expected_cell.get('outputs')
 
 
 def test_get_ith_problem_cells():
@@ -270,7 +281,7 @@ def test_get_ith_problem_cells():
                 "\n",
                 "yst = None\n",
                 "yst = np.datetime64('today') - np.timedelta64(1)\n",
-                "print(yst)"
+                "print('2021-12-09')"
             ]
         }
     ]
