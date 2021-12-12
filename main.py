@@ -27,7 +27,7 @@ def get_ith_problem_cells(nb_cells, i):
     i: the number of problem set you want
 
     """
-    return nb_cells[i:i+5]
+    return nb_cells[(i*5):(i*5)+5]
 
 
 def get_problems(nb):
