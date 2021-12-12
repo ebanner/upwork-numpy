@@ -98,3 +98,8 @@ def make_csv_from_nb(ipynb_fname):
     return csv
 
 
+if __name__ == '__main__':
+    csv = make_csv_from_nb('numpy-numpy.csv')
+    with open('out.csv', 'w') as f:
+        f.write(csv)
+
