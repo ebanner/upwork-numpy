@@ -1,14 +1,11 @@
 import json
+import sys
 import uuid
 import pandas as pd
 
 
-def get_nb_cells_as_json(fname):
-    with open('numpy-numpy.ipynb') as f:
-        lines = [line for line in f.readlines()]
-        json_str = ''.join(lines)
-        json_dict = json.loads(json_str)
-
+def get_nb_cells_as_json(nb_string):
+    json_dict = json.loads(nb_string)
     return json_dict['cells']
 
 
@@ -20,7 +17,7 @@ def get_ith_problem_cells(nb_cells, i):
     i: the number of problem set you want
 
     """
-    return nb_cells[(i*5):(i*5)+5]
+    return nb_cells[i*5:(i*5)+5]
 
 
 def get_problems(nb):
@@ -90,8 +87,8 @@ def to_csv(problems_df):
     return problems_df.to_csv(index=False)
 
 
-def make_csv_from_nb(ipynb_fname):
-    nb_cells = get_nb_cells_as_json(ipynb_fname)
+def make_csv_from_nb(nb_string):
+    nb_cells = get_nb_cells_as_json(nb_string)
     problems = get_problems(nb_cells)
     problems_df = make_df(problems)
     csv = to_csv(problems_df)
@@ -99,7 +96,7 @@ def make_csv_from_nb(ipynb_fname):
 
 
 if __name__ == '__main__':
-    csv = make_csv_from_nb('numpy-numpy.csv')
-    with open('out.csv', 'w') as f:
-        f.write(csv)
+    lines = ''.join(line for line in sys.stdin)
+    csv = make_csv_from_nb(lines)
+    print(csv)
 
