@@ -3,6 +3,8 @@ import sys
 import uuid
 import pandas as pd
 
+from data_types import Problem
+
 
 def get_nb_cells_as_json(nb_string):
     json_dict = json.loads(nb_string)
@@ -66,13 +68,13 @@ def make_problem(problem_cells):
     placeholder = get_placeholder(problem_cells)
     content = get_content(problem_cells)
     output = get_output(problem_cells)
-    problem = {
+    problem = Problem(**{
         'id': id,
         'title': title,
         'placeholder': placeholder,
         'content': content,
         'output': output
-    }
+    })
     return problem
 
 
