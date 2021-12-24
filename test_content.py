@@ -45,3 +45,17 @@ def test_placeholder_contains_your_code_here():
         else:
             print(i)
             assert False
+
+
+def test_content_does_not_contain_your_code_here():
+    """Ensure content does not contain `# Your code here'."""
+    with open('numpy-numpy.ipynb') as f:
+        nb_str = ''.join(f.readlines())
+        nb = json.loads(nb_str)
+        nb_cells = nb['cells']
+
+    for i, problem in enumerate(get_problems(nb_cells), 1):
+        content = problem['content']
+        content_lines = content.split('\n')
+        for line in content_lines:
+            assert line != '# Your code here'
