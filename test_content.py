@@ -27,3 +27,21 @@ def test_your_code_here():
         placeholder_lines[j] = content_lines[j]
         for placeholder_line, content_line in zip(placeholder_lines, content_lines):
             assert placeholder_line == content_line
+
+
+def test_placeholder_contains_your_code_here():
+    """Ensure placeholder does not contain `# Your code here'."""
+    with open('numpy-numpy.ipynb') as f:
+        nb_str = ''.join(f.readlines())
+        nb = json.loads(nb_str)
+        nb_cells = nb['cells']
+
+    for i, problem in enumerate(get_problems(nb_cells), 1):
+        placeholder = problem['placeholder']
+        placeholder_lines = placeholder.split('\n')
+        for line in placeholder_lines:
+            if line == '# Your code here':
+                break
+        else:
+            print(i)
+            assert False
