@@ -59,3 +59,30 @@ def test_content_does_not_contain_your_code_here():
         content_lines = content.split('\n')
         for line in content_lines:
             assert line != '# Your code here'
+
+
+def test_all_code_cells_contain_import_numpy_as_np():
+    """Ensure placeholders and content contain `import numpy as np'"""
+    with open('numpy-numpy.ipynb') as f:
+        nb_str = ''.join(f.readlines())
+        nb = json.loads(nb_str)
+        nb_cells = nb['cells']
+
+    for i, problem in enumerate(get_problems(nb_cells), 1):
+        content = problem['content']
+        content_lines = content.split('\n')
+        for line in content_lines:
+            if line == 'import numpy as np':
+                break
+        else:
+            print(i)
+            assert False
+
+        placeholder = problem['placeholder']
+        placeholder_lines = placeholder.split('\n')
+        for line in placeholder_lines:
+            if line == 'import numpy as np':
+                break
+        else:
+            print(i)
+            assert False
