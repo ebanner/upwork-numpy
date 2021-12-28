@@ -1,6 +1,6 @@
 import json
 
-from main import get_problems, get_placeholder, get_content
+from main import get_problems, get_placeholder, get_content, get_nb_problems, get_ith_problem_cells
 
 
 def test_your_code_here():
@@ -14,7 +14,6 @@ def test_your_code_here():
         nb_cells = nb['cells']
 
     for i, problem in enumerate(get_problems(nb_cells), 1):
-        print(i)
         placeholder = problem['placeholder']
         content = problem['content']
         j = None
@@ -75,7 +74,6 @@ def test_all_code_cells_contain_import_numpy_as_np():
             if line == 'import numpy as np':
                 break
         else:
-            print(i)
             assert False
 
         placeholder = problem['placeholder']
@@ -84,5 +82,19 @@ def test_all_code_cells_contain_import_numpy_as_np():
             if line == 'import numpy as np':
                 break
         else:
-            print(i)
             assert False
+
+
+def test_all_numbers_increasing():
+    """Verify all numbers are increasing, from 1 to 60"""
+    with open('numpy-numpy.ipynb') as f:
+        nb_str = ''.join(f.readlines())
+        nb = json.loads(nb_str)
+        nb_cells = nb['cells']
+
+    nb_problems = get_nb_problems(nb_cells)
+    for i in range(nb_problems):
+        problem_cells = get_ith_problem_cells(nb_cells, i)
+        number_cell = problem_cells[0]
+        markdown = ''.join(number_cell['source'])
+        assert markdown == f'# {i+1}'
