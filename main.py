@@ -3,7 +3,7 @@ import sys
 import uuid
 import pandas as pd
 
-from data_types import Problem
+from data_types import Problem, make_cell
 
 
 def get_nb_cells_as_json(nb_string):
@@ -19,11 +19,16 @@ def get_ith_problem_cells(nb_cells, i):
     i: the number of problem set you want
 
     """
-    return nb_cells[i*5:(i*5)+5]
+    return [make_cell(cell) for cell in nb_cells[i*5:(i*5)+5]]
+
+
+def get_nb_problems(nb):
+    """Get the number of problems in the notebook"""
+    return len(nb) // 5
 
 
 def get_problems(nb):
-    nb_problems = len(nb) // 5
+    nb_problems = get_nb_problems(nb)
     problems = []
     for i in range(nb_problems):
         problem_cells = get_ith_problem_cells(nb, i)
