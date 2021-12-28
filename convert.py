@@ -89,4 +89,4 @@ if __name__ == '__main__':
     nb_str = ''.join(line for line in sys.stdin)
     nb = json.loads(nb_str)
     desired_nb = convert(nb)
-    print(desired_nb)
+    print(json.dumps(desired_nb, indent=4, sort_keys=True))
