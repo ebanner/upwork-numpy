@@ -1,12 +1,34 @@
 from dataclasses import dataclass
-from typing import List, Dict, Any
+from typing import Dict, Optional, List
 
 
-# class NoteBook(BaseModel):
-#     # cells: List[Any]
-#     # metadata: Dict[Any]
-#     nbformat: int
-#     nbformat_minor: int
+def make_cell(cell):
+    if cell['cell_type'] == 'markdown':
+        return MarkdownCell(**cell)
+    elif cell['cell_type'] == 'code':
+        return CodeCell(**cell)
+
+
+@dataclass
+class CodeCell:
+    cell_type: str
+    metadata: Dict
+    source: List
+    execution_count: int
+    outputs: List
+
+    def __getitem__(self, key):
+        return super().__getattribute__(key)
+
+
+@dataclass
+class MarkdownCell:
+    cell_type: str
+    metadata: Dict
+    source: List
+
+    def __getitem__(self, key):
+        return super().__getattribute__(key)
 
 
 @dataclass
