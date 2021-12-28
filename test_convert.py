@@ -396,6 +396,7 @@ def test_get_sol_cells():
     output = get_sol_cells(nb)
     assert output == expected
 
+
 def test_transform_sol_cells():
     sol_cells = [
     {
@@ -496,6 +497,7 @@ def test_transform_source():
     ]
     output = transform_source(input)
     assert output == expected
+
 
 def test_create_nb():
     input = [
